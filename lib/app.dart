@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'core/routes/app_routes.dart';
 import 'core/theme/app_theme.dart';
 
 class KhedmaApp extends StatelessWidget {
@@ -11,7 +10,7 @@ class KhedmaApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      initialRoute: AppRoutes.splash,
+      home: const Scaffold(body: Center(child: Text('Khedma'))),
     );
   }
 }
