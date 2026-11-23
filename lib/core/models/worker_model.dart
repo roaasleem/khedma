@@ -52,7 +52,7 @@ class WorkerModel {
       avatar: json['avatar'] ?? '',
       isAvailable: json['available'] ?? false,
       status: WorkerStatus.values.firstWhere(
-        (s) => s.name == json['status'],
+       (s) => s.name == (json['status'] ?? '').toString().toLowerCase(),
         orElse: () => WorkerStatus.pending,
       ),
       portfolioImages: _parseImages(json['portfolioImages']),
