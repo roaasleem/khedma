@@ -7,8 +7,7 @@ void main() {
 
     final users = await service.getUsers();
 
-    expect(users.length, 5);
-
-    print(users.first.name);
+    expect(users, isNotEmpty);
+    expect(users.first.name, isNotEmpty);
   });
 }

@@ -4,6 +4,7 @@ import 'package:khedma/core/enums/worker_status.dart';
 
 class WorkerModel {
   final String id;
+  final String userId;
   final String name;
   final String profession;
   final String specialty;
@@ -21,6 +22,7 @@ class WorkerModel {
 
   WorkerModel({
     required this.id,
+    required this.userId,
     required this.name,
     required this.profession,
     required this.specialty,
@@ -40,6 +42,7 @@ class WorkerModel {
   factory WorkerModel.fromJson(Map<String, dynamic> json) {
     return WorkerModel(
       id: json['id'].toString(),
+      userId: json['userId']?.toString() ?? '',
       name: json['name'] ?? '',
       profession: json['job'] ?? '',
       specialty: json['specialty'] ?? '',
@@ -62,6 +65,8 @@ class WorkerModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
+      'userId': userId,
       'name': name,
       'job': profession,
       'specialty': specialty,
