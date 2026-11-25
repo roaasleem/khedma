@@ -24,6 +24,18 @@ class UserApiService {
     return UserModel.fromJson(response.data);
   }
 
+  Future<UserModel> updateFavorites(
+    String userId,
+    List<String> favorites,
+  ) async {
+    final response = await ApiClient.dio.patch(
+      '/users/$userId',
+      data: {'favorites': favorites.toSet().toList()},
+    );
+
+    return UserModel.fromJson(response.data);
+  }
+
   Future<void> deleteUser(String id) async {
     await ApiClient.dio.delete('/users/$id');
   }
