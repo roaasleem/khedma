@@ -24,14 +24,14 @@ class SplashScreen extends StatelessWidget {
         ),
         child: Center(
           child: Padding(
-            padding: EdgeInsets.only(top: 80),
+            padding: const EdgeInsets.only(top: 24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
                   'assets/images/khdma_logo.png',
-                  width: 610,
-                  height: 406,
+                  width: 300,
+                  height: 200,
                   fit: BoxFit.cover,
                 ),
                 SizedBox(height: 138),
