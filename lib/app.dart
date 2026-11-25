@@ -5,6 +5,7 @@ import 'core/theme/app_theme.dart';
 import 'core/routes/app_routes.dart';
 
 import 'features/auth/presentation/cubit/auth_cubit.dart';
+import 'features/splash/presentation/screens/splash_screen.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 
 import 'features/home/presentation/screens/home_screen.dart';
@@ -21,8 +22,9 @@ class KhedmaApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
-        initialRoute: AppRoutes.login,
+        initialRoute: AppRoutes.splash,
         routes: {
+          AppRoutes.splash: (context) => const SplashScreen(),
           AppRoutes.login: (context) => const LoginScreen(),
           AppRoutes.home: (context) => HomeScreen(),
           AppRoutes.workerDashboard: (context) => WorkerDashboardScreen(),
