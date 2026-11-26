@@ -1,10 +1,16 @@
+
 import 'package:dio/dio.dart';
 
 class ApiClient {
   static final Dio dio = Dio(
     BaseOptions(
       baseUrl: 'https://6af20c0d42c6561ced38f2c2.mockapi.io',
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 15),
+      sendTimeout: const Duration(seconds: 15),
     ),
   );
 }

@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:khedma/core/theme/app_colors.dart';
 import 'package:khedma/core/enums/worker_status.dart';
+
 import 'package:khedma/features/worker_dashboard/presentation/screens/edit_worker_profile_screen.dart';
 import 'package:khedma/features/worker_dashboard/presentation/cubit/worker_dashboard_cubit.dart';
 import 'package:khedma/features/worker_dashboard/presentation/cubit/worker_dashboard_state.dart';
-import 'package:khedma/features/customer_profile/presentation/screens/customer_profile_screen.dart';
 
 class WorkerDashboardScreen extends StatelessWidget {
   const WorkerDashboardScreen({super.key});
@@ -15,6 +15,18 @@ class WorkerDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<WorkerDashboardCubit, WorkerDashboardState>(
+      listenWhen: (previous, current) {
+        if (current is WorkerDashboardError) {
+          return true;
+        }
+
+        if (previous is WorkerDashboardSuccess &&
+            current is WorkerDashboardSuccess) {
+          return previous.worker.status != current.worker.status;
+        }
+
+        return false;
+      },
       listener: (context, state) {
         if (state is WorkerDashboardError) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -25,7 +37,7 @@ class WorkerDashboardScreen extends StatelessWidget {
         } else if (state is WorkerDashboardSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Worker data loaded successfully'),
+              content: Text('Application status updated'),
             ),
           );
         }
@@ -251,50 +263,6 @@ class WorkerDashboardScreen extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 15),
-
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const EditWorkerProfileScreen(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    width: 390,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'My Profile',
-                          style: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        const Text(
-                          'Edit Profile',
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
               ],
             ),
 
@@ -303,17 +271,24 @@ class WorkerDashboardScreen extends StatelessWidget {
               currentIndex: 0,
               onTap: (index) {
                 if (index == 1) {
+                  final cubit = context.read<WorkerDashboardCubit>();
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const CustomerProfileScreen(),
+                      builder: (context) => BlocProvider.value(
+                        value: cubit,
+                        child: EditWorkerProfileScreen(
+                          worker: worker,
+                        ),
+                      ),
                     ),
                   );
                 }
               },
               items: const [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.dashboard_outlined),
+                  icon: Icon(Icons.grid_view_outlined),
                   label: 'Dashboard',
                 ),
                 BottomNavigationBarItem(
@@ -321,6 +296,11 @@ class WorkerDashboardScreen extends StatelessWidget {
                   label: 'Profile',
                 ),
               ],
+              selectedItemColor: AppColors.primaryColor,
+              unselectedItemColor: AppColors.textSecondary,
+              backgroundColor: AppColors.white,
+              type: BottomNavigationBarType.fixed,
+              elevation: 8,
             ),
           );
         }
