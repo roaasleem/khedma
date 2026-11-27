@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/models/worker_model.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../cubit/favorites_cubit.dart';
 import '../cubit/favorites_state.dart';
 
@@ -17,16 +18,18 @@ class FavoriteButton extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<FavoritesCubit>();
         final isFavorite = cubit.isFavorite(worker.id);
+        final isEnabled =
+            state.isLoaded && !state.isLoading && !state.requiresLogin;
 
         return IconButton(
-          onPressed: state.requiresLogin
+          onPressed: !isEnabled
               ? null
               : () {
                   cubit.toggleFavorite(worker);
                 },
           icon: Icon(
             isFavorite ? Icons.favorite : Icons.favorite_border,
-            color: isFavorite ? Colors.red : Colors.grey,
+            color: isFavorite ? AppColors.error : AppColors.textSecondary,
             size: size,
           ),
           tooltip: isFavorite ? 'Remove from favorites' : 'Add to favorites',

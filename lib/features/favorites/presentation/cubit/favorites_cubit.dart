@@ -62,7 +62,12 @@ class FavoritesCubit extends Cubit<FavoritesState> {
     final requestId = ++_loadRequestId;
 
     emit(
-      state.copyWith(isLoading: true, clearError: true, requiresLogin: false),
+      state.copyWith(
+        isLoading: true,
+        isLoaded: false,
+        clearError: true,
+        requiresLogin: false,
+      ),
     );
 
     try {
@@ -92,7 +97,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
 
       final workers = results.whereType<WorkerModel>().toList();
 
-      emit(FavoritesState(favorites: workers));
+      emit(FavoritesState(favorites: workers, isLoaded: true));
     } catch (e) {
       if (isClosed || requestId != _loadRequestId || _userId != userId) {
         return;
@@ -101,6 +106,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
       emit(
         state.copyWith(
           isLoading: false,
+          isLoaded: false,
           errorMessage: 'Unable to load favorites. Please try again.',
         ),
       );
@@ -120,7 +126,9 @@ class FavoritesCubit extends Cubit<FavoritesState> {
       return;
     }
 
-    if (_isUpdatingFavorites) return;
+    if (!state.isLoaded || state.isLoading || _isUpdatingFavorites) {
+      return;
+    }
 
     _isUpdatingFavorites = true;
 
